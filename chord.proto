@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+service Chord {
+    rpc Register(RegisterMessage) returns (RegisterResponse);
+}
+
+message RegisterMessage {
+    string ipaddr = 1;
+    uint32 port = 2;
+}
+
+message RegisterResponse {
+    uint32 id = 1;
+    uint32 m = 2;
+}
