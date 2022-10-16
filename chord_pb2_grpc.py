@@ -19,6 +19,11 @@ class ChordStub(object):
                 request_serializer=chord__pb2.RegisterMessage.SerializeToString,
                 response_deserializer=chord__pb2.RegisterResponse.FromString,
                 )
+        self.Deregister = channel.unary_unary(
+                '/Chord/Deregister',
+                request_serializer=chord__pb2.DeregisterMessage.SerializeToString,
+                response_deserializer=chord__pb2.DeregisterResponse.FromString,
+                )
         self.PopulateFingerTable = channel.unary_unary(
                 '/Chord/PopulateFingerTable',
                 request_serializer=chord__pb2.PopulateFingerTableMessage.SerializeToString,
@@ -49,12 +54,28 @@ class ChordStub(object):
                 request_serializer=chord__pb2.FindDataMessage.SerializeToString,
                 response_deserializer=chord__pb2.FindDataResponse.FromString,
                 )
+        self.NotifySucc = channel.unary_unary(
+                '/Chord/NotifySucc',
+                request_serializer=chord__pb2.NotifySuccMessage.SerializeToString,
+                response_deserializer=chord__pb2.NotifySuccResponse.FromString,
+                )
+        self.NotifyPred = channel.unary_unary(
+                '/Chord/NotifyPred',
+                request_serializer=chord__pb2.NotifyPredMessage.SerializeToString,
+                response_deserializer=chord__pb2.NotifyPredResponse.FromString,
+                )
 
 
 class ChordServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def Register(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Deregister(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -96,6 +117,18 @@ class ChordServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def NotifySucc(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def NotifyPred(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ChordServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -103,6 +136,11 @@ def add_ChordServicer_to_server(servicer, server):
                     servicer.Register,
                     request_deserializer=chord__pb2.RegisterMessage.FromString,
                     response_serializer=chord__pb2.RegisterResponse.SerializeToString,
+            ),
+            'Deregister': grpc.unary_unary_rpc_method_handler(
+                    servicer.Deregister,
+                    request_deserializer=chord__pb2.DeregisterMessage.FromString,
+                    response_serializer=chord__pb2.DeregisterResponse.SerializeToString,
             ),
             'PopulateFingerTable': grpc.unary_unary_rpc_method_handler(
                     servicer.PopulateFingerTable,
@@ -134,6 +172,16 @@ def add_ChordServicer_to_server(servicer, server):
                     request_deserializer=chord__pb2.FindDataMessage.FromString,
                     response_serializer=chord__pb2.FindDataResponse.SerializeToString,
             ),
+            'NotifySucc': grpc.unary_unary_rpc_method_handler(
+                    servicer.NotifySucc,
+                    request_deserializer=chord__pb2.NotifySuccMessage.FromString,
+                    response_serializer=chord__pb2.NotifySuccResponse.SerializeToString,
+            ),
+            'NotifyPred': grpc.unary_unary_rpc_method_handler(
+                    servicer.NotifyPred,
+                    request_deserializer=chord__pb2.NotifyPredMessage.FromString,
+                    response_serializer=chord__pb2.NotifyPredResponse.SerializeToString,
+            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
             'Chord', rpc_method_handlers)
@@ -158,6 +206,23 @@ class Chord(object):
         return grpc.experimental.unary_unary(request, target, '/Chord/Register',
             chord__pb2.RegisterMessage.SerializeToString,
             chord__pb2.RegisterResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def Deregister(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Chord/Deregister',
+            chord__pb2.DeregisterMessage.SerializeToString,
+            chord__pb2.DeregisterResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -260,5 +325,39 @@ class Chord(object):
         return grpc.experimental.unary_unary(request, target, '/Chord/FindData',
             chord__pb2.FindDataMessage.SerializeToString,
             chord__pb2.FindDataResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def NotifySucc(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Chord/NotifySucc',
+            chord__pb2.NotifySuccMessage.SerializeToString,
+            chord__pb2.NotifySuccResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def NotifyPred(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Chord/NotifyPred',
+            chord__pb2.NotifyPredMessage.SerializeToString,
+            chord__pb2.NotifyPredResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

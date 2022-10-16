@@ -58,11 +58,11 @@ if __name__ == "__main__":
                 print(key)
                 res = stub.RemoveData(pb2.RemoveDataMessage(key=key))
                 if res.status == "Not Found":
-                    print("False, " + key + " does not exist in node " + str(res.node_id))
-                else:
                     print(
-                        "True, " + key + " is removed from node " + str(res.node_id)
+                        "False, " + key + " does not exist in node " + str(res.node_id)
                     )
+                else:
+                    print("True, " + key + " is removed from node " + str(res.node_id))
             elif splits[0] == "find":
                 key = splits[1]
                 channel = grpc.insecure_channel(node_channel)
@@ -70,10 +70,16 @@ if __name__ == "__main__":
                 print(key)
                 res = stub.FindData(pb2.FindDataMessage(key=key))
                 if res.status == "Not Found":
-                    print("False, " + key + " was not found in node " + str(res.node_id))
-                else:
                     print(
-                        "True, " + key + " is saved in node " + str(res.node_id)
+                        "False, " + key + " was not found in node " + str(res.node_id)
                     )
+                else:
+                    print("True, " + key + " is saved in node " + str(res.node_id))
+            elif splits[0] == "quit":
+                print("Shutting Down")
+                break
+            else:
+                print("Unrecognised command\n")
         except KeyboardInterrupt:
+            print("Shutting Down")
             sys.exit(0)

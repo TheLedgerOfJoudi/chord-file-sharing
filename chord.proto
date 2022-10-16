@@ -2,12 +2,15 @@ syntax = "proto3";
 
 service Chord {
     rpc Register(RegisterMessage) returns (RegisterResponse);
+    rpc Deregister(DeregisterMessage) returns (DeregisterResponse);
     rpc PopulateFingerTable(PopulateFingerTableMessage) returns (PopulateFingerTableResponse);
     rpc SaveData(SaveDataMessage) returns (SaveDataResponse);
     rpc RemoveData(RemoveDataMessage) returns (RemoveDataResponse);
     rpc GetChordInfo(GetChordInfoMessage) returns (GetChordInfoResponse);
     rpc GetFingerTable(GetFingerTableMessage) returns (GetFingerTableResponse);
     rpc FindData(FindDataMessage) returns (FindDataResponse);
+    rpc NotifySucc(NotifySuccMessage) returns (NotifySuccResponse);
+    rpc NotifyPred(NotifyPredMessage) returns (NotifyPredResponse);
 }
 
 message RegisterMessage {
@@ -18,6 +21,14 @@ message RegisterMessage {
 message RegisterResponse {
     uint32 id = 1;
     uint32 m = 2;
+}
+
+message DeregisterMessage{
+    uint32 id = 1;
+}
+
+message DeregisterResponse{
+    string ack = 1;
 }
 
 message PopulateFingerTableMessage{
@@ -35,7 +46,7 @@ message SaveDataMessage{
 }
 
 message SaveDataResponse{
-    uint32 node_id = 1;
+    int32 node_id = 1;
     string status = 2;
 }
 
@@ -75,3 +86,22 @@ message GetFingerTableResponse {
     repeated uint32 ids = 2;
     repeated string channels = 3;
 }
+
+message NotifySuccMessage{
+    uint32 pred = 1;
+    repeated string keys = 2;
+    repeated string values = 3;
+}
+
+message NotifySuccResponse{
+    string ack = 1;
+}
+
+message NotifyPredMessage{
+    uint32 succ = 1;
+}
+
+message NotifyPredResponse{
+    string ack = 1;
+}
+

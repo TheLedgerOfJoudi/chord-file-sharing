@@ -31,78 +31,31 @@ def register(ipaddr, port):
 def deregister(id):
     if chord_info.get(id):
         del chord_info[id]
-        return True, "Node was deleted"
+        return "Node was deregisterd"
     else:
-        return False, "No such node"
+        return "No such node"
 
 
 def populate_finger_table(id):
     def succ_find(target):
-        # end = -1
-        # low = 0
-        # end = 0
-        # nums = sorted(chord_info.keys())
-        # if (target>nums[len(nums)-1]):
-        #     return nums[0]
-        # high = len(chord_info) - 1
-        # print(target)
-        # while low < high:
-        #     mid = low + (high - low) // 2
-        #     if nums[mid] <= target:
-        #         low = mid + 1
-        #         if nums[mid] == target:
-        #             end = mid
-        #         if low < len(nums) and nums[low] == target:
-        #             end = low
-        #     else:
-        #         high = mid
-
-        # return nums[end]
         nums = sorted(chord_info.keys())
-        print("nums:")
-        print(nums)
         for value in nums:
             if value >= target:
-                print("target | successor: ", target, value)
                 return value
-        print("target | successor: ", target, nums[0])
         return nums[0]
 
     def pred_find(target):
-        # start = -1
-        # low = 0
-        # nums = sorted(chord_info.keys())
-        # if (target<nums[0]):
-        #     return nums[len(nums)-1]
-        # high = len(nums) - 1
-        # start = 0
-        # while low < high:
-        #     mid = low + (high - low) // 2
-        #     if nums[mid] >= target:
-        #         high = mid
-        #         if nums[mid] == target:
-        #             start = mid
-        #     else:
-        #         low = mid + 1
-        # if nums[low] == target:
-        #     start = low
-        # return nums[start]
         nums = sorted(chord_info.keys())
         nums.reverse()
-        print("nums:")
-        print(nums)
         for value in nums:
             if value < target:
-                print("target | predecessor: ", target, value)
                 return value
-        print("target | predecessor: ", target, nums[len(nums) - 1])
         return nums[len(nums) - 1]
 
     if chord_info.get(id):
         temp_fingers = []
         for i in range(1, m + 1):
             succ = succ_find((id + (2 ** (i - 1))) % (2**m))
-            print(i, succ)
             if succ is not None:
                 temp_fingers.append(succ)
             else:
@@ -121,15 +74,18 @@ class RegistryHandler(pb2_grpc.ChordServicer):
     def Register(self, request, context):
         ipaddr, port = request.ipaddr, request.port
         id, m = register(ipaddr, port)
-        print(id, m)
         reply = {"id": id, "m": m}
         return pb2.RegisterResponse(**reply)
 
+    def Deregister(self, request, context):
+        id = request.id
+        ack = deregister(id)
+        reply = {"ack": ack}
+        return pb2.DeregisterResponse(**reply)
+
     def PopulateFingerTable(self, request, context):
         id = request.id
-
         fingers, pred = populate_finger_table(id)
-        print(pred)
         reply = {"fingers": fingers[id], "pred": pred}
         return pb2.PopulateFingerTableResponse(**reply)
 
