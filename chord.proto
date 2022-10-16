@@ -4,8 +4,10 @@ service Chord {
     rpc Register(RegisterMessage) returns (RegisterResponse);
     rpc PopulateFingerTable(PopulateFingerTableMessage) returns (PopulateFingerTableResponse);
     rpc SaveData(SaveDataMessage) returns (SaveDataResponse);
+    rpc RemoveData(RemoveDataMessage) returns (RemoveDataResponse);
     rpc GetChordInfo(GetChordInfoMessage) returns (GetChordInfoResponse);
     rpc GetFingerTable(GetFingerTableMessage) returns (GetFingerTableResponse);
+    rpc FindData(FindDataMessage) returns (FindDataResponse);
 }
 
 message RegisterMessage {
@@ -33,7 +35,26 @@ message SaveDataMessage{
 }
 
 message SaveDataResponse{
-    string ack = 1;
+    uint32 node_id = 1;
+    string status = 2;
+}
+
+message RemoveDataMessage{
+    string key = 1;
+}
+
+message RemoveDataResponse{
+    uint32 node_id = 1;
+    string status = 2;
+}
+
+message FindDataMessage{
+    string key = 1;
+}
+
+message FindDataResponse{
+    uint32 node_id = 1;
+    string status = 2;
 }
 
 message GetChordInfoMessage{

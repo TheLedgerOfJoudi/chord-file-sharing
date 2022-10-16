@@ -12,7 +12,7 @@ import threading
 reg_ip, reg_port = sys.argv[1].split(":")
 node_ip, node_port = sys.argv[2].split(":")
 
-data = ""
+data = {}
 finger_table = []
 m = -1
 id = -1
@@ -27,42 +27,146 @@ def get_finger_table():
 def save(key, text):
     hash_value = zlib.adler32(key.encode())
     target_id = hash_value % (2**m)
-    if target_id in range(pred, id + 1):
-        data = text
+    print(target_id, key, pred, id)
+    channel = grpc.insecure_channel(reg_ip + ":" + reg_port)
+    stub = pb2_grpc.ChordStub(channel)
+    out = stub.GetChordInfo(pb2.GetChordInfoMessage(message="hi"))
+    if target_id in range(pred, id + 1) or len(out.ids) == 1:
+        if data.get(key):
+            return "False", 2**m
+        data[key] = text
+        return "True", id
     elif target_id in range(id + 1, finger_table[0] + 1):
         channel = grpc.insecure_channel(reg_ip + ":" + reg_port)
         stub = pb2_grpc.ChordStub(channel)
-        out = stub.GetChordInfo()
+        out = stub.GetChordInfo(pb2.GetChordInfoMessage(message="hi"))
+        print(finger_table[0], out.ids)
         for i in range(len(out.ids)):
-            if succ == out.ids[i]:
-                succ_channel = out.values[i]
+            if finger_table[0] == out.ids[i]:
+                succ_channel = out.channels[i]
                 break
         channel = grpc.insecure_channel(succ_channel)
         stub = pb2_grpc.ChordStub(channel)
-        out = stub.SaveData(pb2.SaveDataMessage(key=succ, text=text))
+        out = stub.SaveData(pb2.SaveDataMessage(key=key, text=text))
+        return out.status, out.node_id
     else:
+        next = -1
+        next_channel = ""
+        print(finger_table)
         for i in range(len(finger_table) - 1):
             if target_id >= finger_table[i] and target_id < finger_table[i + 1]:
-                next = i
+                next = finger_table[i]
                 break
+        print(next)
         channel = grpc.insecure_channel(reg_ip + ":" + reg_port)
         stub = pb2_grpc.ChordStub(channel)
-        out = stub.GetChordInfo()
+        out = stub.GetChordInfo(pb2.GetChordInfoMessage(message="hi"))
+        print(next)
         for i in range(len(out.ids)):
             if next == out.ids[i]:
-                next_channel = out.values[i]
+                next_channel = out.channels[i]
                 break
+        print(next_channel)
         channel = grpc.insecure_channel(next_channel)
         stub = pb2_grpc.ChordStub(channel)
-        out = stub.SaveData(pb2.SaveDataMessage(key=next, text=text))
+        out = stub.SaveData(pb2.SaveDataMessage(key=key, text=text))
+        return out.status, out.node_id
 
 
 def remove(key):
-    return
-
+    hash_value = zlib.adler32(key.encode())
+    target_id = hash_value % (2**m)
+    print(target_id, key, pred, id)
+    channel = grpc.insecure_channel(reg_ip + ":" + reg_port)
+    stub = pb2_grpc.ChordStub(channel)
+    out = stub.GetChordInfo(pb2.GetChordInfoMessage(message="hi"))
+    if target_id in range(pred, id + 1) or len(out.ids) == 1:
+        if data.get(key):
+            del data[key]
+            return "Removed", id
+        return "Not Found", id
+    elif target_id in range(id + 1, finger_table[0] + 1):
+        channel = grpc.insecure_channel(reg_ip + ":" + reg_port)
+        stub = pb2_grpc.ChordStub(channel)
+        out = stub.GetChordInfo(pb2.GetChordInfoMessage(message="hi"))
+        print(finger_table[0], out.ids)
+        for i in range(len(out.ids)):
+            if finger_table[0] == out.ids[i]:
+                succ_channel = out.channels[i]
+                break
+        channel = grpc.insecure_channel(succ_channel)
+        stub = pb2_grpc.ChordStub(channel)
+        out = stub.RemoveData(pb2.RemoveDataMessage(key=key))
+        return out.status, out.node_id
+    else:
+        next = -1
+        next_channel = ""
+        print(finger_table)
+        for i in range(len(finger_table) - 1):
+            if target_id >= finger_table[i] and target_id < finger_table[i + 1]:
+                next = finger_table[i]
+                break
+        print(next)
+        channel = grpc.insecure_channel(reg_ip + ":" + reg_port)
+        stub = pb2_grpc.ChordStub(channel)
+        out = stub.GetChordInfo(pb2.GetChordInfoMessage(message="hi"))
+        print(next)
+        for i in range(len(out.ids)):
+            if next == out.ids[i]:
+                next_channel = out.channels[i]
+                break
+        print(next_channel)
+        channel = grpc.insecure_channel(next_channel)
+        stub = pb2_grpc.ChordStub(channel)
+        out = stub.RemoveData(pb2.RemoveDataMessage(key=key))
+        return out.status, out.node_id
 
 def find(key):
-    return key
+    hash_value = zlib.adler32(key.encode())
+    target_id = hash_value % (2**m)
+    print(target_id, key, pred, id)
+    channel = grpc.insecure_channel(reg_ip + ":" + reg_port)
+    stub = pb2_grpc.ChordStub(channel)
+    out = stub.GetChordInfo(pb2.GetChordInfoMessage(message="hi"))
+    if target_id in range(pred, id + 1) or len(out.ids) == 1:
+        if data.get(key):
+            return "Found", id
+        return "Not Found", id
+    elif target_id in range(id + 1, finger_table[0] + 1):
+        channel = grpc.insecure_channel(reg_ip + ":" + reg_port)
+        stub = pb2_grpc.ChordStub(channel)
+        out = stub.GetChordInfo(pb2.GetChordInfoMessage(message="hi"))
+        print(finger_table[0], out.ids)
+        for i in range(len(out.ids)):
+            if finger_table[0] == out.ids[i]:
+                succ_channel = out.channels[i]
+                break
+        channel = grpc.insecure_channel(succ_channel)
+        stub = pb2_grpc.ChordStub(channel)
+        out = stub.FindData(pb2.FindDataMessage(key=key))
+        return out.status, out.node_id
+    else:
+        next = -1
+        next_channel = ""
+        print(finger_table)
+        for i in range(len(finger_table) - 1):
+            if target_id >= finger_table[i] and target_id < finger_table[i + 1]:
+                next = finger_table[i]
+                break
+        print(next)
+        channel = grpc.insecure_channel(reg_ip + ":" + reg_port)
+        stub = pb2_grpc.ChordStub(channel)
+        out = stub.GetChordInfo(pb2.GetChordInfoMessage(message="hi"))
+        print(next)
+        for i in range(len(out.ids)):
+            if next == out.ids[i]:
+                next_channel = out.channels[i]
+                break
+        print(next_channel)
+        channel = grpc.insecure_channel(next_channel)
+        stub = pb2_grpc.ChordStub(channel)
+        out = stub.FindData(pb2.FindDataMessage(key=key))
+        return out.status, out.node_id
 
 
 def quit():
@@ -73,7 +177,21 @@ class NodeHandler(pb2_grpc.ChordServicer):
     def SaveData(self, request, context):
         key = request.key
         text = request.text
-        save(key, text)
+        status, node_id = save(key, text)
+        reply = {"node_id": node_id, "status": status}
+        return pb2.SaveDataResponse(**reply)
+
+    def RemoveData(self, request, context):
+        key = request.key
+        status, node_id = remove(key)
+        reply = {"node_id": node_id, "status": status}
+        return pb2.RemoveDataResponse(**reply)
+
+    def FindData(self, request, context):
+        key = request.key
+        status, node_id = find(key)
+        reply = {"node_id": node_id, "status": status}
+        return pb2.FindDataResponse(**reply)
 
     def GetFingerTable(self, request, context):
         channels = []

@@ -15,6 +15,7 @@ finger_table = {}
 for i in range(2**m):
     finger_table[i] = []
 
+
 def register(ipaddr, port):
     if len(chord_info) == 2**m:
         return -1, "No more slots"
@@ -36,7 +37,6 @@ def deregister(id):
 
 
 def populate_finger_table(id):
-
     def succ_find(target):
         # end = -1
         # low = 0
@@ -62,12 +62,11 @@ def populate_finger_table(id):
         print("nums:")
         print(nums)
         for value in nums:
-            if value>=target:
+            if value >= target:
                 print("target | successor: ", target, value)
                 return value
         print("target | successor: ", target, nums[0])
-        return nums[0]  
-
+        return nums[0]
 
     def pred_find(target):
         # start = -1
@@ -93,13 +92,12 @@ def populate_finger_table(id):
         print("nums:")
         print(nums)
         for value in nums:
-            if value<target:
+            if value < target:
                 print("target | predecessor: ", target, value)
                 return value
-        print("target | predecessor: ", target, nums[len(nums)-1])
-        return nums[len(nums)-1]
+        print("target | predecessor: ", target, nums[len(nums) - 1])
+        return nums[len(nums) - 1]
 
-    
     if chord_info.get(id):
         temp_fingers = []
         for i in range(1, m + 1):
@@ -123,13 +121,13 @@ class RegistryHandler(pb2_grpc.ChordServicer):
     def Register(self, request, context):
         ipaddr, port = request.ipaddr, request.port
         id, m = register(ipaddr, port)
-        print(id,m)
+        print(id, m)
         reply = {"id": id, "m": m}
         return pb2.RegisterResponse(**reply)
 
     def PopulateFingerTable(self, request, context):
         id = request.id
-        
+
         fingers, pred = populate_finger_table(id)
         print(pred)
         reply = {"fingers": fingers[id], "pred": pred}
@@ -139,7 +137,6 @@ class RegistryHandler(pb2_grpc.ChordServicer):
         chord = get_chord_info()
         reply = {"ids": chord.keys(), "channels": chord.values()}
         return pb2.GetChordInfoResponse(**reply)
-
 
 
 if __name__ == "__main__":

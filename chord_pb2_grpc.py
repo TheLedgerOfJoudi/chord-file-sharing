@@ -29,6 +29,11 @@ class ChordStub(object):
                 request_serializer=chord__pb2.SaveDataMessage.SerializeToString,
                 response_deserializer=chord__pb2.SaveDataResponse.FromString,
                 )
+        self.RemoveData = channel.unary_unary(
+                '/Chord/RemoveData',
+                request_serializer=chord__pb2.RemoveDataMessage.SerializeToString,
+                response_deserializer=chord__pb2.RemoveDataResponse.FromString,
+                )
         self.GetChordInfo = channel.unary_unary(
                 '/Chord/GetChordInfo',
                 request_serializer=chord__pb2.GetChordInfoMessage.SerializeToString,
@@ -38,6 +43,11 @@ class ChordStub(object):
                 '/Chord/GetFingerTable',
                 request_serializer=chord__pb2.GetFingerTableMessage.SerializeToString,
                 response_deserializer=chord__pb2.GetFingerTableResponse.FromString,
+                )
+        self.FindData = channel.unary_unary(
+                '/Chord/FindData',
+                request_serializer=chord__pb2.FindDataMessage.SerializeToString,
+                response_deserializer=chord__pb2.FindDataResponse.FromString,
                 )
 
 
@@ -62,6 +72,12 @@ class ChordServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def RemoveData(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def GetChordInfo(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -69,6 +85,12 @@ class ChordServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def GetFingerTable(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def FindData(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -92,6 +114,11 @@ def add_ChordServicer_to_server(servicer, server):
                     request_deserializer=chord__pb2.SaveDataMessage.FromString,
                     response_serializer=chord__pb2.SaveDataResponse.SerializeToString,
             ),
+            'RemoveData': grpc.unary_unary_rpc_method_handler(
+                    servicer.RemoveData,
+                    request_deserializer=chord__pb2.RemoveDataMessage.FromString,
+                    response_serializer=chord__pb2.RemoveDataResponse.SerializeToString,
+            ),
             'GetChordInfo': grpc.unary_unary_rpc_method_handler(
                     servicer.GetChordInfo,
                     request_deserializer=chord__pb2.GetChordInfoMessage.FromString,
@@ -101,6 +128,11 @@ def add_ChordServicer_to_server(servicer, server):
                     servicer.GetFingerTable,
                     request_deserializer=chord__pb2.GetFingerTableMessage.FromString,
                     response_serializer=chord__pb2.GetFingerTableResponse.SerializeToString,
+            ),
+            'FindData': grpc.unary_unary_rpc_method_handler(
+                    servicer.FindData,
+                    request_deserializer=chord__pb2.FindDataMessage.FromString,
+                    response_serializer=chord__pb2.FindDataResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -164,6 +196,23 @@ class Chord(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
+    def RemoveData(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Chord/RemoveData',
+            chord__pb2.RemoveDataMessage.SerializeToString,
+            chord__pb2.RemoveDataResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
     def GetChordInfo(request,
             target,
             options=(),
@@ -194,5 +243,22 @@ class Chord(object):
         return grpc.experimental.unary_unary(request, target, '/Chord/GetFingerTable',
             chord__pb2.GetFingerTableMessage.SerializeToString,
             chord__pb2.GetFingerTableResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def FindData(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Chord/FindData',
+            chord__pb2.FindDataMessage.SerializeToString,
+            chord__pb2.FindDataResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

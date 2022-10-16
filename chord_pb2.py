@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0b\x63hord.proto\"/\n\x0fRegisterMessage\x12\x0e\n\x06ipaddr\x18\x01 \x01(\t\x12\x0c\n\x04port\x18\x02 \x01(\r\")\n\x10RegisterResponse\x12\n\n\x02id\x18\x01 \x01(\r\x12\t\n\x01m\x18\x02 \x01(\r\"(\n\x1aPopulateFingerTableMessage\x12\n\n\x02id\x18\x01 \x01(\r\"<\n\x1bPopulateFingerTableResponse\x12\x0f\n\x07\x66ingers\x18\x01 \x03(\r\x12\x0c\n\x04pred\x18\x02 \x01(\r\",\n\x0fSaveDataMessage\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x0c\n\x04text\x18\x02 \x01(\t\"\x1f\n\x10SaveDataResponse\x12\x0b\n\x03\x61\x63k\x18\x01 \x01(\t\"&\n\x13GetChordInfoMessage\x12\x0f\n\x07message\x18\x01 \x01(\t\"5\n\x14GetChordInfoResponse\x12\x0b\n\x03ids\x18\x01 \x03(\r\x12\x10\n\x08\x63hannels\x18\x02 \x03(\t\"(\n\x15GetFingerTableMessage\x12\x0f\n\x07message\x18\x01 \x01(\t\"H\n\x16GetFingerTableResponse\x12\x0f\n\x07node_id\x18\x01 \x01(\r\x12\x0b\n\x03ids\x18\x02 \x03(\r\x12\x10\n\x08\x63hannels\x18\x03 \x03(\t2\xbb\x02\n\x05\x43hord\x12/\n\x08Register\x12\x10.RegisterMessage\x1a\x11.RegisterResponse\x12P\n\x13PopulateFingerTable\x12\x1b.PopulateFingerTableMessage\x1a\x1c.PopulateFingerTableResponse\x12/\n\x08SaveData\x12\x10.SaveDataMessage\x1a\x11.SaveDataResponse\x12;\n\x0cGetChordInfo\x12\x14.GetChordInfoMessage\x1a\x15.GetChordInfoResponse\x12\x41\n\x0eGetFingerTable\x12\x16.GetFingerTableMessage\x1a\x17.GetFingerTableResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0b\x63hord.proto\"/\n\x0fRegisterMessage\x12\x0e\n\x06ipaddr\x18\x01 \x01(\t\x12\x0c\n\x04port\x18\x02 \x01(\r\")\n\x10RegisterResponse\x12\n\n\x02id\x18\x01 \x01(\r\x12\t\n\x01m\x18\x02 \x01(\r\"(\n\x1aPopulateFingerTableMessage\x12\n\n\x02id\x18\x01 \x01(\r\"<\n\x1bPopulateFingerTableResponse\x12\x0f\n\x07\x66ingers\x18\x01 \x03(\r\x12\x0c\n\x04pred\x18\x02 \x01(\r\",\n\x0fSaveDataMessage\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x0c\n\x04text\x18\x02 \x01(\t\"3\n\x10SaveDataResponse\x12\x0f\n\x07node_id\x18\x01 \x01(\r\x12\x0e\n\x06status\x18\x02 \x01(\t\" \n\x11RemoveDataMessage\x12\x0b\n\x03key\x18\x01 \x01(\t\"5\n\x12RemoveDataResponse\x12\x0f\n\x07node_id\x18\x01 \x01(\r\x12\x0e\n\x06status\x18\x02 \x01(\t\"\x1e\n\x0f\x46indDataMessage\x12\x0b\n\x03key\x18\x01 \x01(\t\"3\n\x10\x46indDataResponse\x12\x0f\n\x07node_id\x18\x01 \x01(\r\x12\x0e\n\x06status\x18\x02 \x01(\t\"&\n\x13GetChordInfoMessage\x12\x0f\n\x07message\x18\x01 \x01(\t\"5\n\x14GetChordInfoResponse\x12\x0b\n\x03ids\x18\x01 \x03(\r\x12\x10\n\x08\x63hannels\x18\x02 \x03(\t\"(\n\x15GetFingerTableMessage\x12\x0f\n\x07message\x18\x01 \x01(\t\"H\n\x16GetFingerTableResponse\x12\x0f\n\x07node_id\x18\x01 \x01(\r\x12\x0b\n\x03ids\x18\x02 \x03(\r\x12\x10\n\x08\x63hannels\x18\x03 \x03(\t2\xa3\x03\n\x05\x43hord\x12/\n\x08Register\x12\x10.RegisterMessage\x1a\x11.RegisterResponse\x12P\n\x13PopulateFingerTable\x12\x1b.PopulateFingerTableMessage\x1a\x1c.PopulateFingerTableResponse\x12/\n\x08SaveData\x12\x10.SaveDataMessage\x1a\x11.SaveDataResponse\x12\x35\n\nRemoveData\x12\x12.RemoveDataMessage\x1a\x13.RemoveDataResponse\x12;\n\x0cGetChordInfo\x12\x14.GetChordInfoMessage\x1a\x15.GetChordInfoResponse\x12\x41\n\x0eGetFingerTable\x12\x16.GetFingerTableMessage\x1a\x17.GetFingerTableResponse\x12/\n\x08\x46indData\x12\x10.FindDataMessage\x1a\x11.FindDataResponseb\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'chord_pb2', globals())
@@ -31,15 +31,23 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _SAVEDATAMESSAGE._serialized_start=211
   _SAVEDATAMESSAGE._serialized_end=255
   _SAVEDATARESPONSE._serialized_start=257
-  _SAVEDATARESPONSE._serialized_end=288
-  _GETCHORDINFOMESSAGE._serialized_start=290
-  _GETCHORDINFOMESSAGE._serialized_end=328
-  _GETCHORDINFORESPONSE._serialized_start=330
-  _GETCHORDINFORESPONSE._serialized_end=383
-  _GETFINGERTABLEMESSAGE._serialized_start=385
-  _GETFINGERTABLEMESSAGE._serialized_end=425
-  _GETFINGERTABLERESPONSE._serialized_start=427
-  _GETFINGERTABLERESPONSE._serialized_end=499
-  _CHORD._serialized_start=502
-  _CHORD._serialized_end=817
+  _SAVEDATARESPONSE._serialized_end=308
+  _REMOVEDATAMESSAGE._serialized_start=310
+  _REMOVEDATAMESSAGE._serialized_end=342
+  _REMOVEDATARESPONSE._serialized_start=344
+  _REMOVEDATARESPONSE._serialized_end=397
+  _FINDDATAMESSAGE._serialized_start=399
+  _FINDDATAMESSAGE._serialized_end=429
+  _FINDDATARESPONSE._serialized_start=431
+  _FINDDATARESPONSE._serialized_end=482
+  _GETCHORDINFOMESSAGE._serialized_start=484
+  _GETCHORDINFOMESSAGE._serialized_end=522
+  _GETCHORDINFORESPONSE._serialized_start=524
+  _GETCHORDINFORESPONSE._serialized_end=577
+  _GETFINGERTABLEMESSAGE._serialized_start=579
+  _GETFINGERTABLEMESSAGE._serialized_end=619
+  _GETFINGERTABLERESPONSE._serialized_start=621
+  _GETFINGERTABLERESPONSE._serialized_end=693
+  _CHORD._serialized_start=696
+  _CHORD._serialized_end=1115
 # @@protoc_insertion_point(module_scope)
