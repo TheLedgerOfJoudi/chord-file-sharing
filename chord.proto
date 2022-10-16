@@ -2,6 +2,10 @@ syntax = "proto3";
 
 service Chord {
     rpc Register(RegisterMessage) returns (RegisterResponse);
+    rpc PopulateFingerTable(PopulateFingerTableMessage) returns (PopulateFingerTableResponse);
+    rpc SaveData(SaveDataMessage) returns (SaveDataResponse);
+    rpc GetChordInfo(GetChordInfoMessage) returns (GetChordInfoResponse);
+    rpc GetFingerTable(GetFingerTableMessage) returns (GetFingerTableResponse);
 }
 
 message RegisterMessage {
@@ -12,4 +16,41 @@ message RegisterMessage {
 message RegisterResponse {
     uint32 id = 1;
     uint32 m = 2;
+}
+
+message PopulateFingerTableMessage{
+    uint32 id = 1;
+}
+
+message PopulateFingerTableResponse{
+    repeated uint32 fingers = 1;
+    uint32 pred = 2;
+}
+
+message SaveDataMessage{
+    string key = 1;
+    string text = 2;
+}
+
+message SaveDataResponse{
+    string ack = 1;
+}
+
+message GetChordInfoMessage{
+    string message = 1;
+}
+
+message GetChordInfoResponse{
+    repeated uint32 ids = 1;
+    repeated string channels = 2;
+}
+
+message GetFingerTableMessage{
+    string message = 1;
+}
+
+message GetFingerTableResponse {
+    uint32 node_id = 1;
+    repeated uint32 ids = 2;
+    repeated string channels = 3;
 }
